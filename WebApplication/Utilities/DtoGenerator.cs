@@ -86,8 +86,8 @@ namespace WebApplication.Utilities
             dto.Id = project.Name;
             dto.Label = !Regex.Match(project.Name, @"[\u0030-\u007a]").Success ? "_" + project.Name : project.Name;
             dto.Image = _localCache.ToDataUrl(localAttributes.Thumbnail);
-            dto.IsAssembly = projectStorage.IsAssembly;
-            dto.HasDrawing = projectStorage.Metadata.HasDrawings;
+            bool isAssembly = projectStorage.IsAssembly;
+            dto.IsAssembly = isAssembly;
             dto.DrawingsListUrl = _localCache.ToDataUrl(localAttributes.DrawingsList);
 
             // fill array with adoption messages

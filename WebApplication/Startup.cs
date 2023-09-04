@@ -37,6 +37,11 @@ using WebApplication.Processing;
 using WebApplication.Services;
 using WebApplication.State;
 using WebApplication.Utilities;
+using System;
+using Microsoft.Extensions.Azure;
+using Azure.Storage.Queues;
+using Azure.Storage.Blobs;
+using Azure.Core.Extensions;
 
 namespace WebApplication
 {
