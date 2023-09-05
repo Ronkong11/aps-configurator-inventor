@@ -116,7 +116,7 @@ namespace WebApplication.Utilities
                 throw new ApplicationException("Initializing Project from invalid bucket key: " + ossObjectName);
             }
 
-            return ossObjectName.Substring(ProjectsMask.Length);
+            return ossObjectName[ProjectsMask.Length..];
         }
 
         /// <summary>
