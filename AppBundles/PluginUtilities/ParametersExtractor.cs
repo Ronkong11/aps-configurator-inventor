@@ -40,8 +40,8 @@ namespace PluginUtilities
             doc.Save2(SaveDependents: true);
 
             // detect iLogic forms
-            iLogicFormsReader reader = new iLogicFormsReader(doc, allParams);
-            iLogicForm[] forms = reader.Extract();
+            ILogicFormsReader reader = new ILogicFormsReader(doc, allParams);
+            ILogicForm[] forms = reader.Extract();
             LogTrace($"Found {forms.Length} iLogic forms");
             foreach (var form in forms)
             {

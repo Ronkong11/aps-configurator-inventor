@@ -111,7 +111,12 @@ namespace WebApplication.Utilities
         /// <param name="ossObjectName">OSS name for the project</param>
         public static string ToProjectName(string ossObjectName)
         {
-            if(!ossObjectName.StartsWith(ProjectsMask))
+            if (ossObjectName is null)
+            {
+                throw new ArgumentNullException(nameof(ossObjectName));
+            }
+
+            if (!ossObjectName.StartsWith(ProjectsMask))
             {
                 throw new ApplicationException("Initializing Project from invalid bucket key: " + ossObjectName);
             }

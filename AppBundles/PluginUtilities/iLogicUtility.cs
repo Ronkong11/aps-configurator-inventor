@@ -25,8 +25,12 @@ using Shared;
 
 namespace PluginUtilities
 {
-    public class iLogicForm
+    public class ILogicForm
     {
+        public ILogicForm()
+        {
+        }
+
         public string Name { get; set; }
         public InventorParameters Parameters { get; set; }
     }
@@ -34,7 +38,7 @@ namespace PluginUtilities
     /// <summary>
     /// Read model-specific UI data from iLogic forms that are stored in an Inventor document.
     /// </summary>
-    internal class iLogicFormsReader
+    internal class ILogicFormsReader : IILogicFormsReader
     {
         #region Inner data types
 
@@ -50,18 +54,18 @@ namespace PluginUtilities
                 _allowedParameters = allowedParameters;
             }
 
-            public static iLogicForm Get(UiStorage storage, string formName, InventorParameters allowedParameters)
+            public static ILogicForm Get(UiStorage storage, string formName, InventorParameters allowedParameters)
             {
                 FormSpecification formSpec = storage.LoadFormSpecification(formName);
                 var extractor = new FormExtractor(formSpec, allowedParameters);
                 return extractor.Run();
             }
 
-            private iLogicForm Run()
+            private ILogicForm Run()
             {
                 ProcessGroup(_formSpec);
 
-                return new iLogicForm
+                return new ILogicForm
                 {
                     Name = _formSpec.Name,
                     Parameters = _collectedParameters
@@ -106,13 +110,13 @@ namespace PluginUtilities
                 if (_allowedParameters.TryGetValue(spec.ParameterName, out var knownParameter))
                 {
                     var result = new InventorParameter
-                                    {
-                                        Label = spec.Name.Trim(),
-                                        Unit = knownParameter.Unit,
-                                        ReadOnly = spec.ReadOnly,
-                                        Value = knownParameter.Value,
-                                        Values = knownParameter.Values
-                                    };
+                    {
+                        Label = spec.Name.Trim(),
+                        Unit = knownParameter.Unit,
+                        ReadOnly = spec.ReadOnly,
+                        Value = knownParameter.Value,
+                        Values = knownParameter.Values
+                    };
 
                     _collectedParameters.Add(spec.ParameterName, result);
                 }
@@ -127,20 +131,24 @@ namespace PluginUtilities
         /// <summary>Constructor.</summary>
         /// <param name="document">Inventor document.</param>
         /// <param name="allowedParameters">Map with Inventor parameters, which are allowed to be extracted.</param>
-        public iLogicFormsReader(Document document, InventorParameters allowedParameters)
+        public ILogicFormsReader(Document document, InventorParameters allowedParameters)
         {
             _allowedParameters = allowedParameters;
             _storage = UiStorageFactory.GetDocumentStorage(document);
         }
 
-        public iLogicForm[] Extract()
+        public ILogicFormsReader()
+        {
+        }
+
+        public ILogicForm[] Extract()
         {
             return _storage.FormNames
                             .Select(GetGroupsAndParameters)
                             .ToArray();
         }
 
-        private iLogicForm GetGroupsAndParameters(string formName)
+        private ILogicForm GetGroupsAndParameters(string formName)
         {
             return FormExtractor.Get(_storage, formName, _allowedParameters);
         }
