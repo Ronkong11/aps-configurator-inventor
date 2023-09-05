@@ -38,6 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\.eslintrc" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\Shared\ExtractedBOM.cs" Link="Definitions\ExtractedBOM.cs" />
     <Compile Include="..\Shared\InventorParameters.cs" Link="Definitions\InventorParameters.cs" />
     <Compile Include="..\Shared\Message.cs" Link="Definitions\Message.cs" />

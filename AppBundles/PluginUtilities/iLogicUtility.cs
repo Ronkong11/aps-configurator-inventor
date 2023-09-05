@@ -31,6 +31,11 @@ namespace PluginUtilities
         {
         }
 
+        public ILogicForm(InventorParameters parameters)
+        {
+            Parameters = parameters;
+        }
+
         public string Name { get; set; }
         public InventorParameters Parameters { get; set; }
     }

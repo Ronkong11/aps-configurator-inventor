@@ -94,6 +94,7 @@
     <ProjectReference Include="..\PluginUtilities\PluginUtilities.csproj">
       <Project>{1B86189C-D714-4A83-B710-F669091C9C6C}</Project>
       <Name>PluginUtilities</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

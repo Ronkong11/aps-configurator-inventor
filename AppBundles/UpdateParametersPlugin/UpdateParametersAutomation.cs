@@ -104,6 +104,10 @@ namespace UpdateParametersPlugin
 
         private static void SetExpression(Parameter parameter, InventorParameter paramData, Document doc)
         {
+            if (paramData is null)
+            {
+                throw new ArgumentNullException(nameof(paramData));
+            }
             // using strongly typed `parameter.get_Units()` throws:
             //    "Failed to set 'PartMaterial' parameter. Error is System.Runtime.InteropServices.COMException (0x80020003): Member not found. (Exception from HRESULT: 0x80020003 (DISP_E_MEMBERNOTFOUND))"
             // and using dynamic (late binding) helps. So stick with it.
@@ -129,7 +133,7 @@ namespace UpdateParametersPlugin
                 }
                 if (!expression.EndsWith("\""))
                 {
-                    expression = expression + "\"";
+                    expression += "\"";
                 }
             }
 
