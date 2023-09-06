@@ -297,7 +297,7 @@ namespace WebApplication.Services
         {
             await _ossResiliencyPolicy.ExecuteAsync(async () =>
                     {
-                        var api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken(TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value) } };
+                        BucketsApi api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken(TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value) } };
                         await action(api);
                     });
         }
