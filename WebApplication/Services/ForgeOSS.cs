@@ -297,13 +297,14 @@ namespace WebApplication.Services
         {
             await _ossResiliencyPolicy.ExecuteAsync(async () =>
                     {
-                        BucketsApi api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken(TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value) } };
+                        string v = await GetTwoLeggedAccessToken(TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value);
+                        BucketsApi api = new BucketsApi { Configuration = { AccessToken = v } };
                         await action(api);
                     });
         }
 
         /// <summary>
-        /// Run action against Buckets OSS API.
+        /// Run <paramref name="action"/> against Buckets OSS API.
         /// </summary>
         /// <remarks>The action runs with retry policy to handle API token expiration.</remarks>
         private async Task<T> WithBucketApiAsync<T>(Func<BucketsApi, Task<T>> action)
