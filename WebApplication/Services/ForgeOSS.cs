@@ -52,12 +52,12 @@ namespace WebApplication.Services
 
         private readonly Policy _ossResiliencyPolicy;
 
-        public Task<string> GetTwoLeggedAccessToken()
-        {
-            return _twoLeggedAccessToken.Value;
-        }
+        public Lazy<Task<string>> TwoLeggedAccessToken1 { get; }
 
-        private readonly Lazy<Task<string>> _twoLeggedAccessToken;
+        public Task<string> GetTwoLeggedAccessToken(Lazy<Task<string>> _twoLeggedAccessToken, Task<string> value)
+        {
+            return value;
+        }
 
         /// <summary>
         /// Forge configuration.
@@ -76,12 +76,12 @@ namespace WebApplication.Services
             string apiBaseUrl = Configuration.AuthenticationAddress.GetLeftPart(System.UriPartial.Authority);
             Autodesk.Forge.Client.Configuration.Default.setApiClientUsingDefault(new ApiClient(apiBaseUrl));
 
-            RefreshApiToken(Get_twoLeggedAccessToken());
+            RefreshApiToken(TwoLeggedAccessToken1);
 
             // create policy to refresh API token on expiration (401 error code)
             var refreshTokenPolicy = Policy
                                     .Handle<ApiException>(e => e.ErrorCode == StatusCodes.Status401Unauthorized)
-                                    .RetryAsync(5, (_, __) => RefreshApiToken(Get_twoLeggedAccessToken()));
+                                    .RetryAsync(5, (_, __) => RefreshApiToken(TwoLeggedAccessToken1));
 
             var bulkHeadPolicy = Policy.BulkheadAsync(10, int.MaxValue);
             var rateLimitRetryPolicy = Policy
@@ -297,7 +297,7 @@ namespace WebApplication.Services
         {
             await _ossResiliencyPolicy.ExecuteAsync(async () =>
                     {
-                        var api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken() } };
+                        var api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken(TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value) } };
                         await action(api);
                     });
         }
@@ -310,7 +310,7 @@ namespace WebApplication.Services
         {
             return await _ossResiliencyPolicy.ExecuteAsync(async () =>
             {
-                var api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken() } };
+                var api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken(TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value) } };
                 return await action(api);
             });
         }
@@ -323,7 +323,7 @@ namespace WebApplication.Services
         {
             await _ossResiliencyPolicy.ExecuteAsync(async () =>
                     {
-                        var api = new ObjectsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken() } };
+                        var api = new ObjectsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken(TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value) } };
                         await action(api);
                     });
         }
@@ -336,7 +336,7 @@ namespace WebApplication.Services
         {
             return await _ossResiliencyPolicy.ExecuteAsync(async () =>
             {
-                var api = new ObjectsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken() } };
+                var api = new ObjectsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken(TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value) } };
                 return await action(api);
             });
         }
@@ -346,10 +346,7 @@ namespace WebApplication.Services
             return access.ToString().ToLowerInvariant();
         }
 
-        private Lazy<Task<string>> Get_twoLeggedAccessToken()
-        {
-            return _twoLeggedAccessToken;
-        }
+        private Lazy<Task<string>> Get_twoLeggedAccessToken() => TwoLeggedAccessToken1;
 
         private void RefreshApiToken(Lazy<Task<string>> _twoLeggedAccessToken)
         {

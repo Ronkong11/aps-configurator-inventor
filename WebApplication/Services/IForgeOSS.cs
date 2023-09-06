@@ -16,6 +16,7 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -90,5 +91,6 @@ namespace WebApplication.Services
         /// User Profile fields: https://forge.autodesk.com/en/docs/oauth/v2/reference/http/users-@me-GET/#body-structure-200
         /// </remarks>
         Task<dynamic> GetProfileAsync(string token);
+        Task<string> GetTwoLeggedAccessToken(Lazy<Task<string>> _twoLeggedAccessToken, Task<string> value);
     }
 }
