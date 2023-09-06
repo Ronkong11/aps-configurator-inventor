@@ -53,7 +53,7 @@ namespace WebApplication.Services
         private readonly Policy _ossResiliencyPolicy;
 
         public Task<string> TwoLeggedAccessToken => _twoLeggedAccessToken.Value;
-        private Lazy<Task<string>> _twoLeggedAccessToken;
+        private readonly Lazy<Task<string>> _twoLeggedAccessToken;
 
         /// <summary>
         /// Forge configuration.
@@ -72,12 +72,12 @@ namespace WebApplication.Services
             string apiBaseUrl = Configuration.AuthenticationAddress.GetLeftPart(System.UriPartial.Authority);
             Autodesk.Forge.Client.Configuration.Default.setApiClientUsingDefault(new ApiClient(apiBaseUrl));
 
-            RefreshApiToken();
+            RefreshApiToken(Get_twoLeggedAccessToken());
 
             // create policy to refresh API token on expiration (401 error code)
             var refreshTokenPolicy = Policy
                                     .Handle<ApiException>(e => e.ErrorCode == StatusCodes.Status401Unauthorized)
-                                    .RetryAsync(5, (_, __) => RefreshApiToken());
+                                    .RetryAsync(5, (_, __) => RefreshApiToken(Get_twoLeggedAccessToken()));
 
             var bulkHeadPolicy = Policy.BulkheadAsync(10, int.MaxValue);
             var rateLimitRetryPolicy = Policy
@@ -342,7 +342,12 @@ namespace WebApplication.Services
             return access.ToString().ToLowerInvariant();
         }
 
-        private void RefreshApiToken()
+        private Lazy<Task<string>> Get_twoLeggedAccessToken()
+        {
+            return _twoLeggedAccessToken;
+        }
+
+        private void RefreshApiToken(Lazy<Task<string>> _twoLeggedAccessToken)
         {
             _twoLeggedAccessToken = new Lazy<Task<string>>(async () => await _2leggedAsync());
         }
