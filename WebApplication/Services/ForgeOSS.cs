@@ -52,7 +52,11 @@ namespace WebApplication.Services
 
         private readonly Policy _ossResiliencyPolicy;
 
-        public Task<string> TwoLeggedAccessToken => _twoLeggedAccessToken.Value;
+        public Task<string> GetTwoLeggedAccessToken()
+        {
+            return _twoLeggedAccessToken.Value;
+        }
+
         private readonly Lazy<Task<string>> _twoLeggedAccessToken;
 
         /// <summary>
@@ -293,7 +297,7 @@ namespace WebApplication.Services
         {
             await _ossResiliencyPolicy.ExecuteAsync(async () =>
                     {
-                        var api = new BucketsApi { Configuration = { AccessToken = await TwoLeggedAccessToken } };
+                        var api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken() } };
                         await action(api);
                     });
         }
@@ -306,7 +310,7 @@ namespace WebApplication.Services
         {
             return await _ossResiliencyPolicy.ExecuteAsync(async () =>
             {
-                var api = new BucketsApi { Configuration = { AccessToken = await TwoLeggedAccessToken } };
+                var api = new BucketsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken() } };
                 return await action(api);
             });
         }
@@ -319,7 +323,7 @@ namespace WebApplication.Services
         {
             await _ossResiliencyPolicy.ExecuteAsync(async () =>
                     {
-                        var api = new ObjectsApi { Configuration = { AccessToken = await TwoLeggedAccessToken } };
+                        var api = new ObjectsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken() } };
                         await action(api);
                     });
         }
@@ -332,7 +336,7 @@ namespace WebApplication.Services
         {
             return await _ossResiliencyPolicy.ExecuteAsync(async () =>
             {
-                var api = new ObjectsApi { Configuration = { AccessToken = await TwoLeggedAccessToken } };
+                var api = new ObjectsApi { Configuration = { AccessToken = await GetTwoLeggedAccessToken() } };
                 return await action(api);
             });
         }
