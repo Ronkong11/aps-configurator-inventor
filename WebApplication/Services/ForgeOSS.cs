@@ -296,19 +296,18 @@ namespace WebApplication.Services
         private async Task WithBucketApiAsync(Func<BucketsApi, Task> action)
         {
             await _ossResiliencyPolicy.ExecuteAsync(async () =>
-                    {
-                        string v = await GetTwoLeggedAccessToken(
-                            TwoLeggedAccessToken1, TwoLeggedAccessToken1.Value);
-                        BucketsApi api = new BucketsApi { Configuration = { AccessToken = v } };
-                        await action(api);
-                    });
+            {
+                var api = new BucketsApi { Configuration = { AccessToken = await TwoLeggedAccessToken } };
+                await action(api);
+            });
         }
+    }
 
-        /// <summary>
-        /// Run <paramref name="action"/> against Buckets OSS API.
-        /// </summary>
-        /// <remarks>The action runs with retry policy to handle API token expiration.</remarks>
-        private async Task<T> WithBucketApiAsync<T>(Func<BucketsApi, Task<T>> action)
+    /// <summary>
+    /// Run <paramref name="action"/> against Buckets OSS API.
+    /// </summary>
+    /// <remarks>The action runs with retry policy to handle API token expiration.</remarks>
+    private async Task<T> WithBucketApiAsync<T>(Func<BucketsApi, Task<T>> action)
         {
             return await _ossResiliencyPolicy.ExecuteAsync(async () =>
             {
