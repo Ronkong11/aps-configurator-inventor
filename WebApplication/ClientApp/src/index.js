@@ -30,7 +30,7 @@ import "@hig/fonts/build/ArtifaktElement.css";
 
 /* eslint-disable no-undef */
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const store = createStoreWithMiddleware(mainReducer);
+const store = createStoreWithMiddleware(mainReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 // based on https://github.com/reduxjs/redux/issues/303#issuecomment-125184409
 function observeStore(store, select, onChange) {
