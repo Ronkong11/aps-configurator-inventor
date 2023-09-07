@@ -204,11 +204,13 @@ namespace WebApplication.State
             await _forgeOSS.UploadChunkAsync(BucketKey, objectName, contentRange, sessionId, stream);
         }
 
-        public async Task<ApiResponse<dynamic>> GetObjectAsync(string objectName)
+        public async Task<ApiResponse<dynamic>> GetApiResponseAsync(string objectName)
         {
             return await _forgeOSS.GetObjectAsync(BucketKey, objectName);
-        }        
-        
+        }
+
+        public ApiResponse<dynamic> GetObject(string objectName, ApiResponse<dynamic> apiResponse) => apiResponse;
+
         /// <summary>
         /// Load JSON from OSS and deserialize it to <see cref="T"/> instance.
         /// </summary>
@@ -294,6 +296,11 @@ namespace WebApplication.State
             {
                 await UploadObjectAsync(objectName, fileReadStream);
             }
+        }
+
+        internal ApiResponse<dynamic> GetObject(string showParametersChanged, Task<ApiResponse<dynamic>> task)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -47,7 +47,7 @@ namespace WebApplication.Controllers
             try
             {
                 var bucket = await _userResolver.GetBucketAsync();
-                ossObjectResponse = await bucket.GetObjectAsync(ONC.ShowParametersChanged);
+                ossObjectResponse = bucket.GetObject(ONC.ShowParametersChanged, bucket.GetApiResponseAsync(ONC.ShowParametersChanged));
             } 
             catch (ApiException ex) when (ex.ErrorCode == 404)
             {
@@ -56,10 +56,8 @@ namespace WebApplication.Controllers
 
             if(ossObjectResponse != null)
             {
-                using (Stream objectStream = ossObjectResponse.Data)
-                {
-                    result = await JsonSerializer.DeserializeAsync<bool>(objectStream);
-                }
+                using Stream objectStream = ossObjectResponse.Data;
+                result = await JsonSerializer.DeserializeAsync<bool>(objectStream);
             }
 
             return result;

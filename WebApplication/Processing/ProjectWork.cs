@@ -178,7 +178,7 @@ namespace WebApplication.Processing
             return (FdaStatsDTO.All(result.Stats), result.ReportUrl);
         }
 
-        public async Task<(FdaStatsDTO stats, int drawingIdx, string reportUrl)> ExportDrawingPdfAsync(string projectName, string hash, string drawingKey)
+        public async Task<(FdaStatsDTO stats, int drawingIdx, string reportUrl)> ExportDrawingPdfAsync(string projectName, string hash, string drawingKey, OssAttributes _)
         {
             _logger.LogInformation($"Getting drawing pdf for hash {hash}");
 
@@ -186,7 +186,7 @@ namespace WebApplication.Processing
             Project project = storage.Project;
 
             var ossNames = project.OssNameProvider(hash);
-            var ossAttributes = project.OssAttributes;
+            _ = project.OssAttributes;
 
             // get drawing index from drawing specified
             var bucket = await _userResolver.GetBucketAsync();
@@ -202,7 +202,7 @@ namespace WebApplication.Processing
             {
                 bool generated = false;
 
-                ApiResponse<dynamic> ossObjectResponse = await bucket.GetObjectAsync(ossNames.DrawingPdf(drawingIdx));
+                ApiResponse<dynamic> ossObjectResponse = bucket.GetObject(ossNames.DrawingPdf(drawingIdx), task: bucket.GetApiResponseAsync(ossNames.DrawingPdf(drawingIdx)));
                 if (ossObjectResponse != null)
                 {
                     await using Stream objectStream = ossObjectResponse.Data;
@@ -316,7 +316,7 @@ namespace WebApplication.Processing
             _logger.LogInformation("Update the project");
             var bucket = await _userResolver.GetBucketAsync();
 
-            var isUpdateExists = bForceUpdate ? false : await IsGenerated(bucket, storage.GetOssNames(hash));
+            bool isUpdateExists = !(bForceUpdate || !await IsGenerated(bucket, storage.GetOssNames(hash)));
             FdaStatsDTO stats;
             string reportUrl;
 
@@ -400,6 +400,11 @@ namespace WebApplication.Processing
                 bucket.CopyAsync(ossFrom.StatsUpdate, ossTo.StatsUpdate));
 
             _logger.LogInformation($"Cache the project locally ({hashTo})");
+        }
+
+        internal Task<(FdaStatsDTO stats, int drawingIndex, string reportUrl)> ExportDrawingPdfAsync(string projectId, string hash, string drawingKey)
+        {
+            throw new NotImplementedException();
         }
     }
 }

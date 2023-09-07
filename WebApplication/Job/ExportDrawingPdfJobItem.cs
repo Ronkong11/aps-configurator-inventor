@@ -46,7 +46,10 @@ namespace WebApplication.Job
             using var scope = Logger.BeginScope("Export Drawing PDF ({Id})");
             Logger.LogInformation($"ProcessJob (ExportDrawingPDF) {Id} for project {ProjectId} started.");
 
-            (FdaStatsDTO stats, int drawingIndex, string reportUrl) = await ProjectWork.ExportDrawingPdfAsync(ProjectId, _hash, _drawingKey);
+            (FdaStatsDTO stats, int drawingIndex, string reportUrl) = await ProjectWork.ExportDrawingPdfAsync(
+                ProjectId,
+                _hash,
+                drawingKey: _drawingKey);
 
             Logger.LogInformation($"ProcessJob (ExportDrawingPDF) {Id} for project {ProjectId} completed.");
 
@@ -60,7 +63,7 @@ namespace WebApplication.Job
                 // when local url starts with a slash, it does not work, because it is doubled in url
                 if (url.StartsWith('/'))
                 {
-                    url = url.Substring(1);
+                    url = url[1..];
                 }
             }
 
