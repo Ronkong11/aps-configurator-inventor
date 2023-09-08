@@ -23,10 +23,8 @@ using WebApplication.Processing;
 
 namespace WebApplication.Job
 {
-    internal class RFAJobItem(ILogger logger, string projectId, string hash, ProjectWork projectWork, LinkGenerator linkGenerator) : JobItemBase(logger, projectId, projectWork)
+    internal class RFAJobItem(ILogger logger, string projectId, ProjectWork projectWork) : JobItemBase(logger, projectId, projectWork)
     {
-        private readonly string _hash = hash;
-        private readonly LinkGenerator _linkGenerator = linkGenerator;
 
         public override bool Equals(object obj)
         {
