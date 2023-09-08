@@ -204,7 +204,7 @@ namespace WebApplication.Controllers
         {
             try
             {
-                await job.ProcessJobAsync(_sender);
+                await job.ProcessJobAsync(_sender, job.GetMessage());
             }
             catch (FdaProcessingException fpe)
             {

@@ -27,25 +27,16 @@ using System.Text.RegularExpressions;
 
 namespace WebApplication.Job
 {
-    internal class AdoptJobItem : JobItemBase
+    internal class AdoptJobItem(ILogger logger, ProjectInfo projectInfo, string fileName, ProjectWork projectWork, DtoGenerator dtoGenerator, UserResolver userResolver) : JobItemBase(logger, null, projectWork)
     {
-        private readonly ProjectInfo _projectInfo;
-        private readonly string _fileName;
-        private readonly UserResolver _userResolver;
-        private readonly DtoGenerator _dtoGenerator;
-
-        public AdoptJobItem(ILogger logger, ProjectInfo projectInfo, string fileName, ProjectWork projectWork, DtoGenerator dtoGenerator, UserResolver userResolver)
-            : base(logger, null, projectWork)
-        {
-            _projectInfo = projectInfo;
-            _fileName = fileName;
-            _dtoGenerator = dtoGenerator;
-            _userResolver = userResolver;
-        }
+        private readonly ProjectInfo _projectInfo = projectInfo;
+        private readonly string _fileName = fileName;
+        private readonly UserResolver _userResolver = userResolver;
+        private readonly DtoGenerator _dtoGenerator = dtoGenerator;
 
         public override async Task ProcessJobAsync(IResultSender resultSender)
         {
-            using var scope = Logger.BeginScope("Project Adoption ({Id})");
+            using System.IDisposable scope = Logger.BeginScope(state: "Project Adoption ({Id})");
 
             Logger.LogInformation($"ProcessJob (Adopt) {Id} for project {_projectInfo.Name} started.");
 

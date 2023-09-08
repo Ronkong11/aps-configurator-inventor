@@ -24,24 +24,16 @@ using WebApplication.Services;
 
 namespace WebApplication.Job
 {
-    internal class AdoptProjectWithParametersJobItem : JobItemBase
+    internal class AdoptProjectWithParametersJobItem(ILogger logger, ProjectService projectService, string payloadUrl,
+        AdoptProjectWithParametersPayloadProvider adoptProjectWithParametersPayloadProvider) : JobItemBase(logger, null, null)
     {
-        private readonly ProjectService _projectService;
-        private readonly string _payloadUrl;
-        private readonly AdoptProjectWithParametersPayloadProvider _adoptProjectWithParametersPayloadProvider;
-
-        public AdoptProjectWithParametersJobItem(ILogger logger, ProjectService projectService, string payloadUrl, 
-            AdoptProjectWithParametersPayloadProvider adoptProjectWithParametersPayloadProvider)
-            : base(logger, null, null)
-        {
-            _projectService = projectService;
-            _payloadUrl = payloadUrl;
-            _adoptProjectWithParametersPayloadProvider = adoptProjectWithParametersPayloadProvider;
-        }
+        private readonly ProjectService _projectService = projectService;
+        private readonly string _payloadUrl = payloadUrl;
+        private readonly AdoptProjectWithParametersPayloadProvider _adoptProjectWithParametersPayloadProvider = adoptProjectWithParametersPayloadProvider;
 
         public override async Task ProcessJobAsync(IResultSender resultSender)
         {
-            using var scope = Logger.BeginScope("Project Adoption ({Id})");
+            using IDisposable scope = Logger.BeginScope("Project Adoption ({Id})");
 
                 var payload = await _adoptProjectWithParametersPayloadProvider.GetParametersAsync(_payloadUrl);
 

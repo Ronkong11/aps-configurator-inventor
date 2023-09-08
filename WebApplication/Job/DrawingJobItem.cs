@@ -24,23 +24,17 @@ using WebApplication.Processing;
 
 namespace WebApplication.Job
 {
-    internal class DrawingJobItem : JobItemBase
+    internal class DrawingJobItem(ILogger logger, string projectId, string hash, ProjectWork projectWork, LinkGenerator linkGenerator) : JobItemBase(logger, projectId, projectWork)
     {
-        private readonly string _hash;
-        private readonly LinkGenerator _linkGenerator;
-
-        public DrawingJobItem(ILogger logger, string projectId, string hash, ProjectWork projectWork, LinkGenerator linkGenerator)
-            : base(logger, projectId, projectWork)
-        {
-            _hash = hash;
-            _linkGenerator = linkGenerator;
-        }
+        private readonly string _hash = hash;
+        private readonly LinkGenerator _linkGenerator = linkGenerator;
 
         public override async Task ProcessJobAsync(IResultSender resultSender)
         {
-            using var scope = Logger.BeginScope("Drawing generation ({Id})");
+            using System.IDisposable scope = Logger.BeginScope("Drawing generation ({Id})");
 
-            Logger.LogInformation($"ProcessJob (Drawing) {Id} for project {ProjectId} started.");
+            string message = $"ProcessJob (Drawing) {Id} for project {ProjectId} started.";
+            Logger.LogInformation(message: message);
 
             (FdaStatsDTO stats, string reportUrl) = await ProjectWork.GenerateDrawingAsync(ProjectId, _hash);
             Logger.LogInformation($"ProcessJob (Drawing) {Id} for project {ProjectId} completed.");
