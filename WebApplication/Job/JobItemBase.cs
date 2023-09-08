@@ -25,7 +25,7 @@ using WebApplication.Processing;
 
 namespace WebApplication.Job
 {
-    public abstract class JobItemBase : JobItemBaseBase
+    public abstract class JobItemBase
     {
         protected ILogger Logger { get; }
         protected ProjectWork ProjectWork { get; }
