@@ -33,6 +33,7 @@ namespace WebApplication.Job
         public string ProjectId { get; }
         public string Id { get; }
         public InventorParameters Parameters { get; private set; }
+        public object payloadURL { get; private set; }
 
         protected JobItemBase(ILogger logger, string projectId, ProjectWork projectWork)
         {
@@ -42,28 +43,40 @@ namespace WebApplication.Job
             Logger = logger;
         }
 
-        public abstract Task ProcessJobAsync(IResultSender resultSender, object v);
+        public abstract Task ProcessJobAsync(
+            IResultSender resultSender, object v);
         internal abstract object Message();
         internal abstract Task ProcessJobAsync(Sender sender, object v);
 
         public override async Task ProcessJobAsync(IResultSender resultSender)
         {
-            const string State = "RFA generation ({Id})";
-            using System.IDisposable scope = Logger.BeginScope(State);
+            using IDisposable scope = Logger.BeginScope("Project Adoption ({Id})");
 
-            Logger.LogInformation($"ProcessJob (RFA) {Id} for project {ProjectId} started.");
+            var payload = await _adoptProjectWithParametersPayloadProvider.GetParametersAsync(payloadURL);
 
-            (var stats, var reportUrl) = await ProjectWork.GenerateRfaAsync(ProjectId, _hash);
-            Logger.LogInformation($"ProcessJob (RFA) {Id} for project {ProjectId} completed.");
+                Logger.LogInformation($"ProcessJob (AdoptProjectWithParameters) {Id} for project {payload.Name} started.");
 
-            // TODO: this url can be generated right away... we can simply acknowledge that the OSS file is ready,
-            // without generating a URL here
-            string rfaUrl = _linkGenerator.GetPathByAction(controller: "Download",
-                                                            action: "RFA",
-                                                            values: new {projectName = ProjectId, hash = _hash});
+                var projectWithParameters = await _projectService.AdoptProjectWithParametersAsync(payload);
 
-            // send resulting URL to the client
-            await resultSender.SendSuccessAsync(rfaUrl, stats, reportUrl);
+                Logger.LogInformation($"ProcessJob (AdoptProjectWithParameters) {Id} for project {payload.Name} completed.");
+
+                await resultSender.SendSuccessAsync(projectWithParameters);
+        }
+    }
+
+    internal class _projectService
+    {
+        internal static Task AdoptProjectWithParametersAsync(object payload)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    internal class _adoptProjectWithParametersPayloadProvider
+    {
+        internal static Task GetParametersAsync(object payloadUrl)
+        {
+            throw new NotImplementedException();
         }
     }
 }

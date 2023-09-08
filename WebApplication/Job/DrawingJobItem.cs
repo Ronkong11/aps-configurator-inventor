@@ -48,5 +48,20 @@ namespace WebApplication.Job
             // send resulting URL to the client
             await resultSender.SendSuccessAsync(drawingUrl, stats, reportUrl);
         }
+
+        public override Task ProcessJobAsync(IResultSender resultSender, object v)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal override object Message()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal override Task ProcessJobAsync(Sender sender, object v)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

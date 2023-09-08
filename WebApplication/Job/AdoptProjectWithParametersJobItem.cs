@@ -31,19 +31,19 @@ namespace WebApplication.Job
         private readonly string _payloadUrl = payloadUrl;
         private readonly AdoptProjectWithParametersPayloadProvider _adoptProjectWithParametersPayloadProvider = adoptProjectWithParametersPayloadProvider;
 
-        public override async Task ProcessJobAsync(IResultSender resultSender)
+        public override Task ProcessJobAsync(IResultSender resultSender, object v)
         {
-            using IDisposable scope = Logger.BeginScope("Project Adoption ({Id})");
+            throw new NotImplementedException();
+        }
 
-                var payload = await _adoptProjectWithParametersPayloadProvider.GetParametersAsync(_payloadUrl);
+        internal override object Message()
+        {
+            throw new NotImplementedException();
+        }
 
-                Logger.LogInformation($"ProcessJob (AdoptProjectWithParameters) {Id} for project {payload.Name} started.");
-
-                var projectWithParameters = await _projectService.AdoptProjectWithParametersAsync(payload);
-
-                Logger.LogInformation($"ProcessJob (AdoptProjectWithParameters) {Id} for project {payload.Name} completed.");
-
-                await resultSender.SendSuccessAsync(projectWithParameters);
+        internal override Task ProcessJobAsync(Sender sender, object v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

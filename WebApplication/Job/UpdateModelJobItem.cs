@@ -34,5 +34,20 @@ namespace WebApplication.Job
         {
             throw new System.NotImplementedException();
         }
+
+        public override Task ProcessJobAsync(IResultSender resultSender, object v)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal override object Message()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal override Task ProcessJobAsync(Sender sender, object v)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
