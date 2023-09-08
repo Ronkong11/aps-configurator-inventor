@@ -28,23 +28,34 @@ namespace WebApplication.Job
         private readonly string _hash = hash;
         private readonly LinkGenerator _linkGenerator = linkGenerator;
 
-        public override async Task ProcessJobAsync(IResultSender resultSender)
+        public override bool Equals(object obj)
         {
-            using System.IDisposable scope = Logger.BeginScope("RFA generation ({Id})");
+            return base.Equals(obj);
+        }
 
-            Logger.LogInformation($"ProcessJob (RFA) {Id} for project {ProjectId} started.");
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
-            (var stats, var reportUrl) = await ProjectWork.GenerateRfaAsync(ProjectId, _hash);
-            Logger.LogInformation($"ProcessJob (RFA) {Id} for project {ProjectId} completed.");
+        public override Task ProcessJobAsync(IResultSender resultSender, object v)
+        {
+            throw new System.NotImplementedException();
+        }
 
-            // TODO: this url can be generated right away... we can simply acknowledge that the OSS file is ready,
-            // without generating a URL here
-            string rfaUrl = _linkGenerator.GetPathByAction(controller: "Download",
-                                                            action: "RFA",
-                                                            values: new {projectName = ProjectId, hash = _hash});
+        public override string ToString()
+        {
+            return base.ToString();
+        }
 
-            // send resulting URL to the client
-            await resultSender.SendSuccessAsync(rfaUrl, stats, reportUrl);
+        internal override object Message()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal override Task ProcessJobAsync(Sender sender, object v)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
