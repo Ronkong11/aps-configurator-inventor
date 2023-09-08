@@ -11,6 +11,9 @@
     <LangVersion>preview</LangVersion>
     <UserSecretsId>9519efb2-9603-4fca-9eaa-5c763799b795</UserSecretsId>
     <Platforms>AnyCPU;x64</Platforms>
+    <OutputType>WinExe</OutputType>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>

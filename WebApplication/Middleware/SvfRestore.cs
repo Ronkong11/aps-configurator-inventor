@@ -28,14 +28,9 @@ namespace WebApplication.Middleware
     /// <summary>
     /// Middleware to restore missing SVFs in local cache
     /// </summary>
-    public class SvfRestore
+    public class SvfRestore(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
-
-        public SvfRestore(RequestDelegate next)
-        {
-            _next = next;
-        }
+        private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext context, UserResolver userResolver, ILogger<SvfRestore> logger)
         {

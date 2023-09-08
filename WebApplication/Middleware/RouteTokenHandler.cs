@@ -28,14 +28,9 @@ namespace WebApplication.Middleware
     /// <summary>
     /// Middleware to extract access token from route parameters.
     /// </summary>
-    public class RouteTokenHandler
+    public class RouteTokenHandler(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
-
-        public RouteTokenHandler(RequestDelegate next)
-        {
-            _next = next;
-        }
+        private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext context, ProfileProvider profileProvider, ILogger<RouteTokenHandler> logger)
         {

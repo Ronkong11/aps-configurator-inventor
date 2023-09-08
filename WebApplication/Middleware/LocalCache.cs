@@ -53,7 +53,7 @@ namespace WebApplication.Middleware
             if (!localFileName.StartsWith(LocalRootName, StringComparison.InvariantCultureIgnoreCase))
                 throw new ApplicationException("Attempt to generate URL for non-data file");
 
-            string relativeName = localFileName.Substring(LocalRootName.Length);
+            string relativeName = localFileName[LocalRootName.Length..];
             return VirtualCacheDir + relativeName.Replace('\\', '/');
         }
 
