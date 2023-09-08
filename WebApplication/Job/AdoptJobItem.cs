@@ -34,6 +34,16 @@ namespace WebApplication.Job
         private readonly UserResolver _userResolver = userResolver;
         private readonly DtoGenerator _dtoGenerator = dtoGenerator;
 
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public override async Task ProcessJobAsync(IResultSender resultSender)
         {
             using System.IDisposable scope = Logger.BeginScope(state: "Project Adoption ({Id})");
@@ -84,6 +94,26 @@ namespace WebApplication.Job
 
             Logger.LogInformation($"ProcessJob (Adopt) {Id} for project {_projectInfo.Name} completed.");
             await resultSender.SendSuccessAsync(_dtoGenerator.ToDTO(projectStorage), stats, reportUrl);
+        }
+
+        public override Task ProcessJobAsync(IResultSender resultSender, object v)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        internal override object Message()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        internal override Task ProcessJobAsync(Sender sender, object v)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -18,31 +18,18 @@
 
 using Microsoft.Extensions.Logging;
 using Shared;
-using System;
 using System.Threading.Tasks;
-using WebApplication.Definitions;
-using WebApplication.Processing;
 
 namespace WebApplication.Job
 {
-    public abstract class JobItemBase
+    public abstract class JobItemBaseBase
     {
-        protected ILogger Logger { get; }
-        protected ProjectWork ProjectWork { get; }
-        public string ProjectId { get; }
-        public string Id { get; }
-        public InventorParameters Parameters { get; private set; }
+        public abstract string Id { get; }
+        public abstract InventorParameters Parameters { get; private set; }
+        protected abstract ILogger Logger { get; }
 
-        protected JobItemBase(ILogger logger, string projectId, ProjectWork projectWork)
-        {
-            ProjectId = projectId;
-            Id = Guid.NewGuid().ToString();
-            ProjectWork = projectWork;
-            Logger = logger;
-        }
-
-        public abstract Task ProcessJobAsync(IResultSender resultSender, object v);
-        internal abstract object Message();
-        internal abstract Task ProcessJobAsync(Sender sender, object v);
+        public abstract override bool Equals(object obj);
+        public abstract override int GetHashCode();
+        public abstract override async Task ProcessJobAsync(IResultSender resultSender);
     }
 }

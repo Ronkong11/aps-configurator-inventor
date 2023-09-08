@@ -204,7 +204,7 @@ namespace WebApplication.Controllers
         {
             try
             {
-                await job.ProcessJobAsync(_sender, job.GetMessage());
+                await job.ProcessJobAsync(_sender, job.Message());
             }
             catch (FdaProcessingException fpe)
             {
@@ -217,7 +217,10 @@ namespace WebApplication.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Processing failed for {job.Id}");
+                string message1 = $"Processing failed for {job.Id}";
+                _logger.LogError(
+                    e,
+                    message1);
 
                 var message = $"Try to repeat your last action and please report the following message: {e.Message}";
                 await _sender.SendErrorAsync(new MessagesError(job.Id, "Internal error", new[]{ message }));
