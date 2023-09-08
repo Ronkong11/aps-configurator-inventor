@@ -1,6 +1,6 @@
 ﻿namespace WebApplication
 {
-    public class IMiddlewareBase
+    public interface IMiddlewareBase1
     {
     }
 }

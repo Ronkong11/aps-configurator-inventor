@@ -9,11 +9,7 @@ namespace WebApplication
     {
         private readonly RequestDelegate _next = next;
 
-        public Task Invoke(HttpContext httpContext)
-        {
-
-            return _next(httpContext);
-        }
+        public Task Invoke(HttpContext httpContext) => _next(httpContext);
     }
 
     // Extension method used to add the middleware to the HTTP request pipeline.
