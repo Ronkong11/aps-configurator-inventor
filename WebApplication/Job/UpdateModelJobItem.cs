@@ -26,9 +26,7 @@ namespace WebApplication.Job
 {
     public class UpdateModelJobItem(ILogger logger, string projectId, InventorParameters parameters, ProjectWork projectWork) : JobItemBase(logger, projectId, projectWork)
     {
-        private readonly InventorParameters parameters;
-
-        public InventorParameters Parameters => parameters;
+        public new InventorParameters Parameters { get; }
 
         public InventorParameters Parameters1 { get; private set; } = parameters;
 

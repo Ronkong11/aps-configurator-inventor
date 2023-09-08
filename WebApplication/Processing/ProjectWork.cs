@@ -406,5 +406,10 @@ namespace WebApplication.Processing
         {
             throw new NotImplementedException();
         }
+
+        internal Task<(ProjectStateDTO state, FdaStatsDTO stats, string reportUrl)> DoSmartUpdateAsync(object parameters, string projectId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

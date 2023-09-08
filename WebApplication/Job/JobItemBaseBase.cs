@@ -1,4 +1,7 @@
-﻿/////////////////////////////////////////////////////////////////////
+﻿using System.Threading.Tasks;
+using WebApplication.Definitions;
+using WebApplication.Processing;
+/////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
 // Written by Autodesk Design Automation team for Inventor
 //
@@ -16,31 +19,9 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-using Microsoft.Extensions.Logging;
-using Shared;
-using System;
-using System.Threading.Tasks;
-using WebApplication.Definitions;
-using WebApplication.Processing;
-
 namespace WebApplication.Job
 {
-    public abstract class JobItemBase : JobItemBaseBase
+    public abstract class JobItemBaseBase : JobItemBaseBaseBase
     {
-        protected ILogger Logger { get; }
-        protected ProjectWork ProjectWork { get; }
-        public string ProjectId { get; }
-        public string Id { get; }
-        public InventorParameters Parameters { get; private set; }
-
-        protected JobItemBase(ILogger logger, string projectId, ProjectWork projectWork)
-        {
-            ProjectId = projectId;
-            Id = Guid.NewGuid().ToString();
-            ProjectWork = projectWork;
-            Logger = logger;
-        }
-
-        public abstract Task ProcessJobAsync(IResultSender resultSender);
     }
 }
