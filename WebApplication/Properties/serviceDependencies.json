@@ -1,16 +1,17 @@
 {
   "dependencies": {
-    "secrets1": {
-      "type": "secrets"
+    "storage1": {
+      "type": "storage",
+      "connectionId": "King1",
+      "dynamicId": null
+    },
+    "secrets2": {
+      "type": "secrets",
+      "connectionId": "VaultUri"
     },
     "signalr1": {
       "type": "signalr",
       "connectionId": "Azure:SignalR:ConnectionString",
-      "dynamicId": null
-    },
-    "storage1": {
-      "type": "storage",
-      "connectionId": "King1",
       "dynamicId": null
     }
   }

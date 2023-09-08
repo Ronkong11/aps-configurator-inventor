@@ -13,7 +13,9 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.Azure.SignalR"
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.Azure.SignalR",
+        "VaultUri": "https://webapplicationvault1.vault.azure.net/",
+        "AZURE_USERNAME": "rking@royalinnovators.cloud"
       }
     },
     "aps-configurator-inventor": {
@@ -22,7 +24,9 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.Azure.SignalR"
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.Azure.SignalR",
+        "VaultUri": "https://webapplicationvault1.vault.azure.net/",
+        "AZURE_USERNAME": "rking@royalinnovators.cloud"
       },
       "applicationUrl": "https://localhost:5001"
     }
